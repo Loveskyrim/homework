@@ -87,89 +87,88 @@ void main()
                         	{
 					parent=groupI;child=groupJ;
 				}
-				else {child=groupI;parent=groupJ;}
+					else {child=groupI;parent=groupJ;}
                     
 				if (parent.contains(child)) // если большая содержит меньшую
 				{               
 	                	        parent.subtraction(child);              //  то вычитаем меньшую из большей
 	                	        repeat=true;                            //  фиксируем факт изменения групп
 				}
-				else if (groupI.overlaps(groupJ) > 0) // иначе если группы пересекаются
-				{
-					if (groupI.getMines()>groupJ.getMines())// определяем большую и меньшую группы по кол-ву мин
+					else if (groupI.overlaps(groupJ) > 0) // иначе если группы пересекаются
 					{
-						parent=groupI;child=groupJ;
-					}
-                        	else {child=groupI;parent=groupJ;}
-				
-				group overlap = parent.getOverlap(child);// то берем результат пересечения
-                        	if (overlap != NULL) 	//  и если он имеет смысл (в результате пересечения выявились ячейки с 0% или 100%)
-				{
-					if ((!parent.overlapstwice(child)) || (overlap.size()>2))
-					{
-						groupMap.insert(overlap);//то вносим соответствующие коррективы в список
-                        			parent.subtraction(overlap);
-                        			child.subtraction(overlap);
-                        			repeat=true;	
-					}
-					else
-					{
-//--------------------------------------------------------------------------------------------------------------------//					
-					unordered_map<cell, float>* cells= new unordered_map<>(); // цикл устанавливает единое значение вероятности в каждой ячейке, учитывая различные значения вероятностей в ячейке от разных групп
-        			for (group Group : groupMap)
-				{
-            				for (cell Cell: group.getList())
-					{
-						float value;
-					if (find(Cell)==null) // если ячейка еще не в мапе
-                   				{
-						cells.insert(Cell,(Group.getMines()/ Group.size()));// то добавляем ее со значением из группы
-						Cell.setPossibility(Group.getMines()/ Group.size());
-						}
-                			else     //если она уже в мапе, то редачим ее
+						if (groupI.getMines()>groupJ.getMines())// определяем большую и меньшую группы по кол-ву мин
 						{
-						cells.emplace_hint(Cell,1-(1-(Group.getMines()/ Group.size())*(1-Cell.getPossibility));
-            					Cell.setPossibility(1-(1-(Group.getMines()/ Group.size())*(1-Cell.getPossibility));
+							parent=groupI;child=groupJ;
 						}
-					}
-        			}
-        // цикл корректирует значения с учетом того, что сумма вероятностей в группе должна быть равна количеству мин в группе
-        bool repeat;
+                        			else {child=groupI;parent=groupJ;}
+				
+						group overlap = parent.getOverlap(child);// то берем результат пересечения
+                        			if (overlap != NULL) 	//  и если он имеет смысл (в результате пересечения выявились ячейки с 0% или 100%)
+						{
+							if ((!parent.overlapstwice(child)) || (overlap.size()>2))
+							{
+								groupMap.insert(overlap);//то вносим соответствующие коррективы в список
+                        					parent.subtraction(overlap);
+                        					child.subtraction(overlap);
+                        					repeat=true;	
+							}
+								else
+								{
+//--------------------------------------------------------------------------------------------------------------------//					
+									unordered_map<cell, float>* cells= new unordered_map<>(); // цикл устанавливает единое значение вероятности в каждой ячейке, учитывая различные значения вероятностей в ячейке от разных групп
+        								for (group Group : groupMap)
+									{
+      						      				for (cell Cell: Group.getList())
+										{
+											float value;
+											if (find(Cell)==null) // если ячейка еще не в мапе
+                   									{
+												cells.insert(Cell,(Group.getMines()/ Group.size()));// то добавляем ее со значением из группы
+												Cell.setPossibility(Group.getMines()/ Group.size());
+											}
+                									else     //если она уже в мапе, то редачим ее
+											{
+											cells.emplace_hint(Cell,1-(1-(Group.getMines()/ Group.size())*(1-Cell.getPossibility));
+            										Cell.setPossibility(1-(1-(Group.getMines()/ Group.size())*(1-Cell.getPossibility));
+											}
+										}
+        								}
+        							// цикл корректирует значения с учетом того, что сумма вероятностей в группе должна быть равна количеству мин в группе
+      								bool repeat;
        
-	do{
-            repeat=false;
-            for (group Group : groupMap){                      // для каждой группы
-                list<float> prob = Group.getProbabilities()*100; //  берем список вероятностей всех ячеек в группе в процентах
-                float sum=0.0;
-                for (float elem : prob) sum+=elem;             //  вычисляем ее сумму
-                int mines= Group.getMines()*100;             //  умножаем количество мин в группе на сто (из-за процентов)
-                if (abs(sum-mines)>1){                  //  если разница между ними велика, то проводим корректировку
-                    repeat=true;                             //   фиксируем факт корректировки
-                              //   корректируем список
-                    for (int i=0;i< Group.size();i++){       //   заносим откорректированные значения из списка в ячейки
-			group GrPoss = Group.getList();
-                        float value= (Group.getMines()/sum);
-                        setPossibility(value);
-                    }
-                }
-            }
-        }
-        while (repeat);
-        for (Cell cell:cells.keySet()){  // перестраховка
-            if (cell.getPossibility()>99)cell.setPossibility(99);
-            if (cell.getPossibility()<0)cell.setPossibility(0);
-        }
-    }
+								do
+								{
+	        							repeat=false;
+	        							for (group Group : groupMap)	// для каждой группы
+									{
+								                list<float> prob = Group.getProbabilities()*100; //  берем список вероятностей всех ячеек в группе в процентах
+                								float sum=0.0;
+	           								for (float elem : prob) sum+=elem;//вычисляем ее сумму
+        								        int mines= Group.getMines()*100;//умножаем количество мин в группе на сто (из-за процентов)
+        								        if (abs(sum-mines)>1)//если разница между ними велика, то проводим корректировку
+										{                  
+        	        								repeat=true;   //фиксируем факт корректировки
+    									//   корректируем список
+	        							        	for (int i=0;i< Group.size();i++)//заносим откорректированные значения из списка в ячейки
+											{       
+												group GrPoss = Group.getList();
+		      								                float value= (Group.getMines()/sum);
+		           								        Group.setPossibility(value);
+		                							}
+	                							}
+									}
+								}while (repeat);
+        
+								for (cell Cell:cells.()){  // перестраховка
+     							     	if (Cell.getPossibility()>99)Cell.setPossibility(99);
+								if (Cell.getPossibility()<0)Cell.setPossibility(0);
+        							}
+    							}
+						}			
 					}
-
-
-                        		
-				}
-			}	
-		}
-	}
-}
-        while(repeat);
+				}	
+			}
+		}while(repeat);
 
 
 

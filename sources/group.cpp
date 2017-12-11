@@ -100,10 +100,10 @@ bool group::overlapstwice(group group2)//group1 пересекает group2 в �
 			listcell.push_back(cell2);
 		}
 	group Overlap = listcell;
-	for (const auto& cell1 : Overlap.size()-1) //Проходим по списку
-	{  
-		for (const auto& cell2 : Overlap.size())
-		{
+	for (auto it=Overlap.begin(); it != Overlap.end()-1; ++it) //Проходим по списку
+	{  cell cell1=it*;
+		for (auto it2=Overlap.begin()+a; it2 != Overlap.end(); ++it2)
+		{	cell cell2=it2*;
 			if (overlap.size()==2)//Если пересечение=2, делаем проверку
 			if (abs(cell1.x_-cell2.x_)==2 || abs(cell1.y_-cell2.y_)==2) k=2;
 			if (overlap.size()==4) k=4; //Если=4, то в любом случае пересекает дважды
