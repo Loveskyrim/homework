@@ -12,22 +12,21 @@ class group
 	list <cell> listcell;
 
 public:
-	group(int mines_);
+    explicit group(int mines_);
 	
 	void addCell(cell& cell2);
-	int size();
-	int getMines();
-	list <cell>& getList();
-	void setProbabilities(float newPoss);
-	list<float> getProbabilities();
-	list<char> getValues();
+	unsigned long size() const;
+	int getMines() const;
+    void setMines(int newmines);
+	list <cell>& getList() const;
+	list<float> getProbabilities() const;
 	bool equal(group group2);
 	bool contains (group group2);
 	bool overlaps(group group2);
 	bool overlapstwice(group group2);
-	list <cell>& getOverlap(group group2);
+	group getOverlap(group group2);
 	void subtraction(group group2);
-	~group(int number);
+	~group();
 };
 
 #endif

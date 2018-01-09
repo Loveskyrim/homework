@@ -1,6 +1,8 @@
-#include "../include/cell.hpp"
+#include "cell.hpp"
 
-cell::cell(int x, int y) : x_(x), y_(y)
+cell::cell(): x_(0), y_(0), value_('/') {}
+
+cell::cell(int x, int y, char newValue) : x_(x), y_(y), value_(newValue)
 {}
 
 void cell::setPossibility(float newPoss)
@@ -9,33 +11,28 @@ void cell::setPossibility(float newPoss)
 	
 }
 
-void cell::getPossibility()
-{
-	return poss_;	
-}
-
 void cell::setValue(char newValue)
 {
 	value_=newValue;
 }
 
-void cell::getValue()
+char cell::getValue() const
 {
 	return value_;
 }
 
-void cell::PrintInFile(ostream& f)
+float cell::getPossibility() const
 {
-	f<< "["<< x << "][" << y << "], перспективность=" << (1-poss);
+	return poss_;
 }
+void cell::setXY(int x, int y)  {x_=x; y_=y;}
+int cell::getX() const { return x_;}
+int cell::getY() const { return y_;}
 
-cell::cell(int x, int y, char value)//Вызов ячейки без добавления в группу
+/*void cell::PrintInFile(ostream& f)
 {
-	x_=x;
-	y_=y;
-	value_=value;
-}
-
+	f<< "["<< x << "][" << y << "], перспективность=" << (1-poss_);
+}*/
 
 cell::cell(int x, int y, char value, group *pGr)//Включаем ячейку в группу
 {
@@ -43,8 +40,13 @@ cell::cell(int x, int y, char value, group *pGr)//Включаем ячейку 
 	y_=y;
 	value_=value;
 	pGroup_=pGr;
-	pGroup->listcell.push_back(*this);
+	pGroup_->getList().push_back(*this);
 	
 }
 
-cell::~cell(int x, int y){}
+bool cell::operator <(const cell &x)
+{
+	return ( this->getPossibility()< x.getPossibility());
+}
+
+cell::~cell(void){}

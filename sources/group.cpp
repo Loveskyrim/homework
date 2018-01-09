@@ -1,5 +1,5 @@
-#include "../include/group.hpp"
-#include "../include/cell.hpp"
+#include "group.hpp"
+#include "cell.hpp"
 
 
 group::group(int mines) : mines_(mines) {}
@@ -10,54 +10,47 @@ void group::addCell(cell& cell2)//Добавить ячейку в группу
 	listcell.push_back(cell2);
 }
 
-int group::size()
+unsigned long group::size() const
 {
-	listcell.size();
+    return listcell.size();
 }
 
-int group::getMines()
+int group::getMines() const
 {
 	return mines_;
 }
 
-list <cell>& group::getList()
+void group::setMines(int newmines)
+{
+    mines_=newmines;
+}
+
+list <cell>& group::getList() const
 {
 	return listcell;
 }
 
-void group::setProbabilities(float newPoss)
+list<float> group::getProbabilities() const
 {
-	for (auto it=listcell.begin(); it != listcell.end(); ++it)
+    list<float> listPoss;
+	for (auto& it: listcell)
 	{
-		it*.poss_=newPoss;
+		listPoss.push_back(it.getPossibility());
 	}
-}
-list<float> group::getProbabilities()
-{
-	for (int i=0; i<listcell.size(); i++)
-	{
-		return cell.getPossibility();
-	}
-}
-
-list<char> group::getValues()
-{
-	for (int i=0; i<listcell.size(); i++)
-	{
-		return cell.getValue();
-	}
+    return listPoss;
 }
 
 bool group::equal(group group2)//Экивалентность групп по ячейкам
 {
 	if (this->size() != group2.size()) return false;
-	for (const auto& cell1 : this)
+	bool flag=false;
+    for (auto& cell1 : this->getList())
 		{
-		while(bool flag=false)
-		for (const auto& cell2 : group2)
-		if (cell1.x_ = cell2.x_ && cell1.y_ = cell2.y_)
-			{flag=true;}
-		if (!flag) return false;
+                    for (auto& cell2 : group2.getList())
+		                if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
+			                flag=true;
+            if (flag) flag = false;
+            else return false;
 		}
 	return true;
 }
@@ -65,14 +58,15 @@ bool group::equal(group group2)//Экивалентность групп по я
 bool group::contains(group group2)//group1 содержит в себе group2
 {
 	if (this->size() <= group2.size()) return false;
-	for (const auto& cell2 : group2)
+	bool flag=false;
+    for (auto& cell2 : group2.getList())
 		{
-		while(bool flag=false)
-		for (const auto& cell1 : this)
-		if (cell1.x_ = cell2.x_ && cell1.y_ = cell2.y_)
-			{flag=true;}
-		if (!flag) return false;
-		}
+                    for (auto& cell1 : this->getList())
+                        if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
+                            flag = true;
+            if (flag) flag = false;
+            else return false;
+        }
 	return true;
 }
 
@@ -80,67 +74,62 @@ bool group::contains(group group2)//group1 содержит в себе group2
 bool group::overlaps(group group2)//group1 пересекает group2
 {
 	int k=0;
-	for (const auto& cell1 : this)
+	for (auto& cell1 : this->getList())
 		{
-		for (const auto& cell2 : group2)
-		if (cell1.x_ = cell2.x_ && cell1.y_ = cell2.y_)
+		for (auto& cell2 : group2.getList())
+		if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
 			k++;
 		}
-	if (k>0) return true
-	else return false;
+    return k > 0;
 }
 
 bool group::overlapstwice(group group2)//group1 пересекает group2 в двух местах
 {
-	int k=0; //то же самое что и в getOverlap
-	for (const auto& cell1 : this)
+	list<cell> Overlap;
+	for (auto& cell1 : this->getList())
 		{
-		for (const auto& cell2 : group2)
-		if (cell1.x_ = cell2.x_ && cell1.y_ = cell2.y_)
-			listcell.push_back(cell2);
+		for (auto& cell2 : group2.getList())
+		if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
+			Overlap.push_back(cell2);
 		}
-	group Overlap = listcell;
-	for (auto it=Overlap.begin(); it != Overlap.end()-1; ++it) //Проходим по списку
-	{  cell cell1=it*;
-		for (auto it2=Overlap.begin()+a; it2 != Overlap.end(); ++it2)
-		{	cell cell2=it2*;
-			if (overlap.size()==2)//Если пересечение=2, делаем проверку
-			if (abs(cell1.x_-cell2.x_)==2 || abs(cell1.y_-cell2.y_)==2) k=2;
-			if (overlap.size()==4) k=4; //Если=4, то в любом случае пересекает дважды
+
+	for (const auto& it: Overlap) //Проходим по списку
+	{
+		for (const auto& it2: Overlap)
+		{
+			if (Overlap.size()>=2)//Если пересечение, делаем проверку
+			    if ((it.getX()-it2.getX())==2 || abs(it.getY()-it2.getY())==2) return true;
 		} 
 	}
-	if (k>0) return true
-	else return false;
+	return false;
 }
 
-list <cell>& group::getOverlap(group group2)//составляем из пересекающихся ячеек новый список
+group group::getOverlap(group group2)//составляем из пересекающихся ячеек новый список
 {
-	for (const auto& cell1 : this)
-		{
-		for (const auto& cell2 : group2)
-		if (cell.x_ = cell2.x_ && cell1.y_ = cell2.y_)
-		listcell.push_back(cell2);
-		}
-		group Gr = listcell;
-		Gr.mines_=this.mines_-(group2.size()-Gr.size());
+    group Gr(0);
+    for (auto& cell1 : this->getList())
+    {
+        for (auto& cell2 : group2.getList())
+            if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
+                Gr.addCell(cell2);
+    }
+    Gr.setMines(static_cast<int>(this->getMines() - (group2.size() - Gr.size())));
 	return Gr;
 }
 
 void group::subtraction(group group2)//Вычитаем из текущей группы group2
 {
-	if (this->size() <= group2.size()) return false;
-	for (const auto& cell2 : group2)
+
+    if (this->size() <= group2.size())
+        return;
+	for (const auto& cell2 : group2.getList())
 		{
-		for (const auto& cell1 : this)
-		if (cell1.x_ = cell2.x_ && cell1.y_ = cell2.y_)
-			this.erase(cell1);
-			
+		for (auto cell1=this->getList().begin(); cell1!=this->getList().end(); ++cell1)
+		if (cell1->getX() == cell2.getX() && cell1->getY() == cell2.getY())
+			this->getList().erase(cell1);
 		}
-	this.mines_-=group2.mines_;
-	return true;
+	this->setMines(this->getMines()-group2.getMines());
 }
 
 
-group::~group(int number)
-{
-}
+group::~group(void) {}

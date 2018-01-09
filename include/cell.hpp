@@ -3,25 +3,31 @@
 
 #include <string>
 #include <iostream>
-
+#include <list>
+#include <cstring>
+#include "group.hpp"
 class cell
 {
-	private:
-		char value_;
-		float poss_;
-		int x_;
-		int y_;
-		group *pGroup_;
-	public:
-		cell(int x, int y);
-		void setPossibility(double newPoss);
-		void getPossibility();
+private:
+		char value_;//1 byte
+		float poss_;//4 byte
+		int x_;//4 byte
+		int y_;//4 byte
+		group *pGroup_;//8 byte
+public:
+		cell();
+		cell(int x, int y, char newValue);
+		void setPossibility(float newPoss);
 		void setValue(char newValue);
-		void getValue();
-		void PrintInFile(ostream& f);
-		cell(int x, int y, char value);
+		char getValue() const;
+		float getPossibility() const;
+		void setXY(int x, int y);
+		int getX() const;
+		int getY() const;
+		//void PrintInFile(ostream& f);
 		cell(int x, int y, char value, group *pGr);
-		~cell(int x, int y);
+		bool operator <(const cell &x);
+		~cell();
 };
 
 #endif
