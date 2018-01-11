@@ -13,7 +13,6 @@ private:
 		float poss_;//4 byte
 		int x_;//4 byte
 		int y_;//4 byte
-		group *pGroup_;//8 byte
 public:
 		cell();
 		cell(int x, int y, char newValue);
@@ -25,8 +24,10 @@ public:
 		int getX() const;
 		int getY() const;
 		//void PrintInFile(ostream& f);
-		cell(int x, int y, char value, group *pGr);
-		bool operator <(const cell &x);
+		bool operator <(const cell &x) const;
+        bool operator <(const cell &x);
+        bool operator==(const cell &other) const;
+        bool operator==(const cell &other);
 		~cell();
 };
 

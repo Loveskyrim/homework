@@ -8,24 +8,29 @@ class cell;
 
 class group
 {
-	int mines_;
+private:
+    int mines_;
 	list <cell> listcell;
 
 public:
-    explicit group(int mines_);
+    group(int mines_);
 	
 	void addCell(cell& cell2);
 	unsigned long size() const;
 	int getMines() const;
     void setMines(int newmines);
-	list <cell>& getList() const;
-	list<float> getProbabilities() const;
-	bool equal(group group2);
+	list <cell>& getList();
+    const list <cell>& getList() const;
+    list<float> getProbabilities();
+	bool equal(group group2) const;
 	bool contains (group group2);
-	bool overlaps(group group2);
+	bool overlaps(group group2) const;
 	bool overlapstwice(group group2);
 	group getOverlap(group group2);
 	void subtraction(group group2);
+    bool operator==(const group &other) const;
+    bool operator<(const group &other) const;
+    bool operator<(const group &other);
 	~group();
 };
 

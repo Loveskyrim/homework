@@ -25,13 +25,11 @@ list
 /root/Рабочий стол/homework/examples/main.cpp
 cell.hpp
 /root/Рабочий стол/homework/examples/cell.hpp
-iostream
--
 fstream
 -
 cmath
 -
-unordered_set
+set
 -
 iterator
 -

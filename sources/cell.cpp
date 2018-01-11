@@ -34,19 +34,30 @@ int cell::getY() const { return y_;}
 	f<< "["<< x << "][" << y << "], перспективность=" << (1-poss_);
 }*/
 
-cell::cell(int x, int y, char value, group *pGr)//Включаем ячейку в группу
+
+
+bool cell::operator <(const cell &x) const
 {
-	x_=x;
-	y_=y;
-	value_=value;
-	pGroup_=pGr;
-	pGroup_->getList().push_back(*this);
-	
+	return ( this->getPossibility()< x.getPossibility());
 }
 
 bool cell::operator <(const cell &x)
 {
 	return ( this->getPossibility()< x.getPossibility());
+}
+
+bool cell::operator==(const cell &other) const
+{ return (value_ == other.value_
+		  && poss_ == other.poss_
+		  && x_ == other.x_
+		  && y_ == other.y_);
+}
+
+bool cell::operator==(const cell &other)
+{ return (value_ == other.value_
+		  && poss_ == other.poss_
+		  && x_ == other.x_
+		  && y_ == other.y_);
 }
 
 cell::~cell(void){}

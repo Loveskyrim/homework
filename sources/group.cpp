@@ -25,12 +25,17 @@ void group::setMines(int newmines)
     mines_=newmines;
 }
 
-list <cell>& group::getList() const
+list <cell>& group::getList()
 {
 	return listcell;
 }
 
-list<float> group::getProbabilities() const
+const list <cell>& group::getList() const
+{
+    return listcell;
+}
+
+list<float> group::getProbabilities()
 {
     list<float> listPoss;
 	for (auto& it: listcell)
@@ -40,7 +45,7 @@ list<float> group::getProbabilities() const
     return listPoss;
 }
 
-bool group::equal(group group2)//Экивалентность групп по ячейкам
+bool group::equal(group group2) const//Экивалентность групп по ячейкам
 {
 	if (this->size() != group2.size()) return false;
 	bool flag=false;
@@ -71,7 +76,7 @@ bool group::contains(group group2)//group1 содержит в себе group2
 }
 
 
-bool group::overlaps(group group2)//group1 пересекает group2
+bool group::overlaps(group group2) const//group1 пересекает group2
 {
 	int k=0;
 	for (auto& cell1 : this->getList())
@@ -131,5 +136,19 @@ void group::subtraction(group group2)//Вычитаем из текущей гр
 	this->setMines(this->getMines()-group2.getMines());
 }
 
+bool group::operator==(const group &other) const
+{ return (mines_ == other.mines_
+          && this->equal(other));
+}
+
+bool group::operator<(const group &other) const
+{
+    return (mines_<other.mines_);
+}
+
+bool group::operator<(const group &other)
+{
+    return (mines_<other.mines_);
+}
 
 group::~group(void) {}
