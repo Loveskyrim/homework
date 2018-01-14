@@ -35,14 +35,13 @@ const list <cell>& group::getList() const
     return listcell;
 }
 
-list<float> group::getProbabilities()
+void group::getProbabilities(list<float> &listPoss) const
 {
-    list<float> listPoss;
+
 	for (auto& it: listcell)
 	{
 		listPoss.push_back(it.getPossibility());
 	}
-    return listPoss;
 }
 
 bool group::equal(group group2) const//Экивалентность групп по ячейкам
@@ -90,23 +89,32 @@ bool group::overlaps(group group2) const//group1 пересекает group2
 
 bool group::overlapstwice(group group2)//group1 пересекает group2 в двух местах
 {
-	list<cell> Overlap;
-	for (auto& cell1 : this->getList())
-		{
-		for (auto& cell2 : group2.getList())
-		if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
-			Overlap.push_back(cell2);
-		}
+    list<cell> Overlap;
+    for (auto &cell1 : this->getList()) {
+        for (auto &cell2 : group2.getList())
+            if (cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY())
+                Overlap.push_back(cell2);
+    }
+    if (Overlap.size() >= 2)//Если пересечение, делаем проверку
+    {
+        for (const auto &it: Overlap) //Проходим по списку
+        {
+            for (const auto &it2: Overlap)
+            {
+                if ((it.getX() - it2.getX()) == 2 || abs(it.getY() - it2.getY()) == 2) return true;
+            }
+        }
+    }
 
-	for (const auto& it: Overlap) //Проходим по списку
-	{
-		for (const auto& it2: Overlap)
-		{
-			if (Overlap.size()>=2)//Если пересечение, делаем проверку
-			    if ((it.getX()-it2.getX())==2 || abs(it.getY()-it2.getY())==2) return true;
-		} 
-	}
 	return false;
+}
+
+bool group::inGroup(cell &cell2)
+{
+    for (auto it: this->listcell) {
+        if (it.getX()==cell2.getX() && it.getY()==cell2.getY()) return true;
+    }
+    return false;
 }
 
 group group::getOverlap(group group2)//составляем из пересекающихся ячеек новый список
@@ -130,9 +138,12 @@ void group::subtraction(group group2)//Вычитаем из текущей гр
 	for (const auto& cell2 : group2.getList())
 		{
 		for (auto cell1=this->getList().begin(); cell1!=this->getList().end(); ++cell1)
-		if (cell1->getX() == cell2.getX() && cell1->getY() == cell2.getY())
-			this->getList().erase(cell1);
-		}
+		if (cell1->getX() == cell2.getX() && cell1->getY() == cell2.getY()) {
+
+            this->getList().erase(cell1);
+            break;
+        }
+        }
 	this->setMines(this->getMines()-group2.getMines());
 }
 

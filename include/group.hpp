@@ -21,11 +21,12 @@ public:
     void setMines(int newmines);
 	list <cell>& getList();
     const list <cell>& getList() const;
-    list<float> getProbabilities();
+    void getProbabilities(list<float> &listPoss) const;
 	bool equal(group group2) const;
 	bool contains (group group2);
 	bool overlaps(group group2) const;
 	bool overlapstwice(group group2);
+    bool inGroup(cell &cell2);
 	group getOverlap(group group2);
 	void subtraction(group group2);
     bool operator==(const group &other) const;

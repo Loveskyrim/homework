@@ -38,24 +38,24 @@ int cell::getY() const { return y_;}
 
 bool cell::operator <(const cell &x) const
 {
-	return ( this->getPossibility()< x.getPossibility());
+	return ( this->getPossibility() < x.getPossibility());
 }
 
 bool cell::operator <(const cell &x)
 {
-	return ( this->getPossibility()< x.getPossibility());
+	return ( this->getPossibility() < x.getPossibility());
 }
 
 bool cell::operator==(const cell &other) const
 { return (value_ == other.value_
 		  && poss_ == other.poss_
-		  && x_ == other.x_
+          && x_ == other.x_
 		  && y_ == other.y_);
 }
 
 bool cell::operator==(const cell &other)
 { return (value_ == other.value_
-		  && poss_ == other.poss_
+          && poss_ == other.poss_
 		  && x_ == other.x_
 		  && y_ == other.y_);
 }
