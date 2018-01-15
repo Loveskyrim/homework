@@ -1,3 +1,0 @@
-/root/Рабочий стол/homework/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/root/Рабочий стол/homework/cmake-build-debug/CMakeFiles/edit_cache.dir
-/root/Рабочий стол/homework/cmake-build-debug/CMakeFiles/Examples.dir

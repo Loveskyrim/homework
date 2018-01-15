@@ -28,10 +28,9 @@ group setGroup(cell field2[], int i2, int j2, int height2, int width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
 
-else    if (i2==0 && j2>0 && j2<width2)
+     if (i2==0 && j2>0 && j2<width2)
     {
         for (int iGr=0; iGr<2; iGr++)
         {
@@ -50,10 +49,9 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
 
-    else    if (i2==height2-1 && j2>0 && j2<width2)
+     if (i2==height2-1 && j2>0 && j2<width2)
     {
         for (int iGr=height2-1; iGr<height2+1; iGr++)
         {
@@ -72,9 +70,8 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
-    else if (i2 > 0 && i2 < height2 - 1 && j2 == 0)
+    if (i2 > 0 && i2 < height2 - 1 && j2 == 0)
     {
         for (int iGr=i2-1; iGr<i2+2; iGr++)
         {
@@ -93,10 +90,9 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
 
-    else    if (i2>0 && i2<height2-1 && j2==width2-1)
+    if (i2>0 && i2<height2-1 && j2==width2-1)
     {
         for (int iGr=i2-1; iGr<i2+2; iGr++)
         {
@@ -115,10 +111,9 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
 
-    else    if (i2==0 && j2==width2-1)
+    if (i2==0 && j2==width2-1)
     {
         for (int iGr=0; iGr<2; iGr++)
         {
@@ -137,10 +132,8 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
-
-    else    if (i2==height2-1 && j2==0)
+    if (i2==height2-1 && j2==0)
     {
         for (int iGr=height2-2; iGr<height2; iGr++)
         {
@@ -159,10 +152,9 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
 
-    else    if (i2==height2-1 && j2==width2-1)
+    if (i2==height2-1 && j2==width2-1)
     {
         for (int iGr=height2-2; iGr<height2; iGr++)
         {
@@ -181,9 +173,8 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
     }
-    else
+
     if (i2>0 && i2<height2-1 && j2>0 && j2<width2-1)
     {
         for (int iGr = i2 - 1; iGr < i2 + 2; iGr++)
@@ -205,8 +196,9 @@ else    if (i2==0 && j2>0 && j2<width2)
         list<float> listPoss;
         pGroup_.getProbabilities(listPoss);
         for (float elem : listPoss) cout<<elem<<endl;//Правильно выводит лист вероятностей
-        return pGroup_;
+
     }
+    return pGroup_;
 };
 
 void probCorrect(group &GroupCor, int minesCor)
@@ -227,16 +219,19 @@ int main()
 {
 	
 	ifstream ifs; //Файл для чтения
+    ofstream *ofs; //Файл для записи
+    string file, file2;
 	std::list<group> groupSet; //Set состоящий из групп
 	list<cell> finalCells;//Список для вывода в поток или файл
+    cout<<"The file to read:"<<endl;
+    cout<<"Example:/root/Рабочий_стол/homework/examples/example01.txt"<<endl;
+    cin>>file; cout<<endl;
+    cout<<"The file to write in"<<endl;
+    cout<<"Example:/root/Рабочий_стол/homework/examples/example01_1.txt"<<endl;
+    cin>>file2; cout<<endl;
+        ifs.open(file);
+        if (!ifs.is_open()) throw std::invalid_argument("Cannot open the file"+file);
 
-    try {
-        ifs.open("/root/Рабочий стол/homework/examples/example01.txt");
-        if (!ifs.is_open()) throw 1;
-    }catch (int Err){
-		cerr << "Возникло исключение: "<< Err << "-Файл не найден" << endl;
-	//	cerr << "File not found!!!!!!!" << endl;
-	};
 
 
     if (ifs.is_open())
@@ -295,29 +290,31 @@ int main()
                         if (field[i2][j2].getValue() != 'x' &&
                             field[i2][j2].getValue() != '0')
                         {//Если ячейка открыта, создаем новую группу
-                            try
-                            {
+
                                 group newGroup=setGroup(reinterpret_cast<cell*>(field), i2, j2, height, width);
-                                if (newGroup.size()< field[i2][j2].getValue()-'0') throw 2;
-                                else  {
+                                if (newGroup.size()< field[i2][j2].getValue()-'0') throw std::invalid_argument("Cell value is bigger than closed cells around:"+ (field[i2][j2].getValue()-'0'));
+
+
                                     list<float> listPoss;
                                     newGroup.getProbabilities(listPoss);
                                     for (auto it: listPoss)
                                 cout<< "Создана группа с вероятностями ячеек:"<< it<<endl;
                                     groupSet.push_back(newGroup);
-                                }
-                            }catch (int Err) {
-                                cerr<<"Возникло исключение:"<<Err<<"Значение в ячейке больше числа закрытых ячеек вокруг нее"<<endl;}
+
+
 
                         }
                     }
                 }
+                if (groupSet.size()>1)
+                    for (auto& Group: groupSet)
+                    if (Group.getMines()==setMines) throw std::invalid_argument(" Bombs are only in group " + Group.getMines());
 //-----------------------------------------------------------------------------------------------------------------//
                 bool repeat1;
                 do {
                     repeat1 = false;
 
-                    for (auto it=groupSet.begin(); it!=groupSet.end(); ++it) // проходим по списку групп
+                    for (auto it=groupSet.begin(); it!=groupSet.end();it++) // проходим по списку групп
                     {
                         group GroupI = *it;
                         for (auto it2 = groupSet.begin()++;
@@ -446,7 +443,7 @@ int main()
                                                 }
                                             }
 
-                                        }
+                                        }else {break;}
 
                                     }
 
@@ -499,6 +496,9 @@ int main()
 
                 } while (repeat1);
 
+
+
+
                 for (auto& Group: groupSet)
                     for (auto &Cell: Group.getList()) {
                         if (finalCells.empty()) {
@@ -530,17 +530,18 @@ int main()
 
                 finalCells.sort();
 
+                ofs = new ofstream(file2);
 
                 for (const auto &it: finalCells) {
-                    std::cout << 1 - (it.getPossibility()) << "-possibility x[" << it.getX() << "] y[" << it.getY()
-                              << "]";//Неправильно выводится итоговая вероятность
-                    std::cout << std::endl;
+                    *ofs << 1 - (it.getPossibility()) << "-possibility x[" << it.getX() << "] y[" << it.getY()
+                              << "]"<<endl;//Неправильно выводится итоговая вероятность
                 }
-
+                ofs->close();
+                delete ofs;
 
             } else if (setMines == closedCells_)
                 std::cout << "Every cell already has a mine";//Надо переделать (присвоить нулевое значение вероятности каждой ячейке и вывести)
-        } else std::cout << "Too many mines for this field:" << setMines << " mines for" << fieldSize_ << " cells";
+        } else throw std::invalid_argument ("Too many mines for this field:" + setMines);
 
         ifs.close();
     }
